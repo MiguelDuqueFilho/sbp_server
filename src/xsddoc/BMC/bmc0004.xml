@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DOC xmlns="http://www.iata.org/IATA/2015/00/2020.2/DOC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iata.org/IATA/2015/00/2020.2/DOC ../DOC.xsd">
+  <BCMSG>
+    <IdentdEmissor>String</IdentdEmissor>
+    <IdentdDestinatario>String</IdentdDestinatario>
+    <IdentdContg>String</IdentdContg>
+    <IdentdOperad>String</IdentdOperad>
+    <IdentdOperadConfc>String</IdentdOperadConfc>
+    <Grupo_Seq>
+      <NumSeq>176</NumSeq>
+      <IndrCont>String</IndrCont>
+    </Grupo_Seq>
+    <DomSist>String</DomSist>
+    <NUOp>String</NUOp>
+  </BCMSG>
+  <SISMSG>
+    <BMC0004>
+      <CodMsg>String</CodMsg>
+      <NumCtrlBMC>String</NumCtrlBMC>
+      <ISPBIF>String</ISPBIF>
+      <Grupo_BMC0004_OpContrd>
+        <CodMoeda>176</CodMoeda>
+        <DtLiquid>UNKNOWN</DtLiquid>
+        <Grupo_BMC0004_OpInterbanc>
+          <NumCtrlBMCContrd>String</NumCtrlBMCContrd>
+          <VlrMN>10</VlrMN>
+          <VlrME>10</VlrME>
+          <TaxCam>10</TaxCam>
+          <ISPBIFCtrapart>String</ISPBIFCtrapart>
+          <TpOpCAM>String</TpOpCAM>
+        </Grupo_BMC0004_OpInterbanc>
+        <VlrTotCompraMN>10</VlrTotCompraMN>
+        <VlrTotCompraME>10</VlrTotCompraME>
+        <VlrTotVendaMN>10</VlrTotVendaMN>
+        <VlrTotVendaME>10</VlrTotVendaME>
+      </Grupo_BMC0004_OpContrd>
+      <DtMovto>UNKNOWN</DtMovto>
+    </BMC0004>
+  </SISMSG>
+  <USERMSG>String</USERMSG>
+</DOC>

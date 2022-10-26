@@ -1,0 +1,141 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl"]
+  previewFeatures = ["filteredRelationCount"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ServerLog {
+  id        Int      @id @default(autoincrement()) @db.Integer
+  timestamp DateTime @default(now()) @db.Timestamp(0)
+  level     String   @db.Text
+  message   String   @db.Text
+  meta      Json?
+
+  @@map(name: "ServerLogs")
+}
+
+// model User {
+//   id       String @id @default(uuid())
+//   username String @unique
+//   password String
+
+//   @@map(name: "users")
+// }
+
+model GrupoServico {
+  GrpServico String   @id @db.VarChar(15)
+  Descricao  String   @db.VarChar(255)
+  Dominio    String   @db.VarChar(15)
+  Eventos    Evento[]
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+
+  @@map(name: "GrupoServicos")
+}
+
+model Evento {
+  CodEvento    String        @id @db.VarChar(15)
+  NomeEvento   String?       @db.VarChar(255)
+  Fluxo        String        @db.VarChar(10)
+  GrupoServico GrupoServico? @relation(fields: [GrpServicoId], references: [GrpServico])
+  GrpServicoId String?       @db.VarChar(15)
+  IsConvert    Boolean       @default(false)
+  EventJson    Json          @default("[]")
+  Mensagens    Mensagem[]
+  createdAt    DateTime      @default(now())
+  updateAt     DateTime      @updatedAt
+
+  @@map(name: "Eventos")
+}
+
+model Mensagem {
+  CodMsg          String   @id @db.VarChar(15)
+  Tag             String   @db.VarChar(255)
+  Descricao       String   @db.VarChar(255)
+  EntidadeOrigem  String   @db.VarChar(50)
+  EntidadeDestino String   @db.VarChar(50)
+  Eventos         Evento?  @relation(fields: [CodEventoId], references: [CodEvento])
+  CodEventoId     String   @db.VarChar(15)
+  createdAt       DateTime @default(now())
+  updateAt        DateTime @updatedAt
+
+  @@map(name: "Mensagens")
+}
+
+enum MsgProcessEnum {
+  ACTIVE
+  PENDING
+  DISABLE
+}
+
+enum MSgStatusEnum {
+  VALIDATE
+  ERROR
+}
+
+model MessageReceive {
+  id         String         @id @default(uuid())
+  codMsg     String
+  xmlMessage String         @db.Xml
+  process    MsgProcessEnum @default(DISABLE)
+  status     MSgStatusEnum  @default(ERROR)
+  error      Json?
+  dateRef    DateTime
+  createdAt  DateTime       @default(now())
+  updateAt   DateTime       @updatedAt
+
+  @@map(name: "MessagesReceive")
+}
+
+model MessageSend {
+  id         String         @id @default(uuid())
+  codMsg     String
+  xmlMessage String         @db.Xml
+  process    MsgProcessEnum @default(DISABLE)
+  status     MSgStatusEnum  @default(ERROR)
+  error      Json?
+  dateRef    DateTime       @default(now())
+  createdAt  DateTime       @default(now())
+  updateAt   DateTime       @updatedAt
+
+  @@map(name: "MessagesSend")
+}
+
+// model CatCoderrors {
+//   id            String   @id @default(uuid())
+//   cod           String   @unique
+//   Descricao   String?
+//   date_active   String?
+//   date_inactive String?
+//   createdAt     DateTime @default(now())
+
+//   @@map(name: "cat_coderrors")
+// }
+
+// model CatGrade {
+//   grade              String  @unique
+//   horario_abertura   DateTime?
+//   horario_fechamento DateTime?
+
+//   @@map(name: "cat_grade")
+// }
+
+// model CatGradeXMsg {
+//   grade     String
+//   mensagens String
+
+//   @@unique([grade, mensagens], name: "CatGradeXMsg_grade_mensagens_unique_constraint")
+//   @@map(name: "cat_grade_x_msg")
+// }
+
+// model CatIspb {
+//   ISPB  String  @unique
+//   descr String?
+
+//   @@map(name: "cat_ispb")
+// }
