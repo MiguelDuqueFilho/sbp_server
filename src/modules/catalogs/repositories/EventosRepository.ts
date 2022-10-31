@@ -1,20 +1,10 @@
+import { Evento } from "@prisma/client";
+
 import { prisma } from "../../../database/prismaClient";
-import { IMensagem } from "./MensagensRepository";
+import { IEventosRepository } from "./IEventosRepository";
 
-interface IEvento {
-  CodEvento?: string;
-  NomeEvento?: string;
-  Fluxo?: string;
-  GrpServicoId?: string;
-  IsConvert?: boolean;
-  EventJson?: JSON;
-  Mensagens?: IMensagem[];
-  createdAt?: string;
-  updateAt?: string;
-}
-
-class EventosRepository {
-  async GetEvent(CodEvento: string) {
+export class EventosRepository implements IEventosRepository {
+  async getEvent(CodEvento: string) {
     const result = await prisma.evento.findUnique({
       where: {
         CodEvento,
@@ -27,7 +17,8 @@ class EventosRepository {
     });
     return result;
   }
-  async createMany(eventos: IEvento[]) {
+
+  async createMany(eventos: Evento[]) {
     const result = await prisma.evento.createMany({
       data: eventos as [],
       skipDuplicates: true,
@@ -75,5 +66,3 @@ class EventosRepository {
     return result;
   }
 }
-
-export { EventosRepository, IEvento };

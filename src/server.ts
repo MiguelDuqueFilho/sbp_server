@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import "./shared/container";
 import cors from "cors";
 import express from "express";
 import fileUpLoad from "express-fileupload";

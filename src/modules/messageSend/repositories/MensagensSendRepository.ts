@@ -1,21 +1,10 @@
-import { MsgProcessEnum, MSgStatusEnum } from "@prisma/client";
+import { MessageSend } from "@prisma/client";
 
 import { prisma } from "../../../database/prismaClient";
+import { IMensagensSendRepository } from "./IMensagensSendRepository";
 
-interface IMessageSend {
-  id?: string;
-  codMsg: string;
-  xmlMessage: string;
-  process?: MsgProcessEnum;
-  status?: MSgStatusEnum;
-  error?: object[];
-  dateRef?: Date;
-  createdAt?: Date;
-  updateAt?: Date;
-}
-
-class MensagensSendRepository {
-  async create(message: IMessageSend) {
+export class MensagensSendRepository implements IMensagensSendRepository {
+  async create(message: MessageSend) {
     const result = await prisma.messageSend.create({
       data: message,
     });
@@ -32,5 +21,3 @@ class MensagensSendRepository {
     return result;
   }
 }
-
-export { MensagensSendRepository, IMessageSend };

@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
 
 import { UpdateSchemaUseCase } from "./UpdateSchemaUseCase";
 
-class UpdateSchemaController {
+export class UpdateSchemaController {
   async handle(request: Request, response: Response) {
-    const updateSchemaUseCase = new UpdateSchemaUseCase();
+    const updateSchemaUseCase = container.resolve(UpdateSchemaUseCase);
     const { event } = request.params;
 
     const result = await updateSchemaUseCase.execute(event);
@@ -12,5 +13,3 @@ class UpdateSchemaController {
     return response.json(result);
   }
 }
-
-export { UpdateSchemaController };

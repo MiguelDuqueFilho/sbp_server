@@ -1,33 +1,44 @@
-import { EventosRepository } from "../../repositories/EventosRepository";
-import { GrupoServicosRepository } from "../../repositories/GrupoServicosRepository";
+import { inject, injectable } from "tsyringe";
+
+import { IEventosRepository } from "../../repositories/IEventosRepository";
+import { IGrupoServicosRepository } from "../../repositories/IGrupoServicosRepository";
+import { IUpdateSchemaByServiceUseCase } from "./IUpdateSchemaByServiceUseCase";
 import { SchemaXSDConvert } from "./SchemaXSDConvert";
 
-export class UpdateSchemaByServiceUseCase {
+@injectable()
+export class UpdateSchemaByServiceUseCase
+  implements IUpdateSchemaByServiceUseCase
+{
+  constructor(
+    @inject("GrupoServicosRepository")
+    private grupoServicosRepository: IGrupoServicosRepository,
+    @inject("EventosRepository")
+    private eventosRepository: IEventosRepository
+  ) {}
   async execute(service: string) {
-    const grupoServicosRepository = new GrupoServicosRepository();
     const schemaXSDConvert = new SchemaXSDConvert();
-    const eventosRepository = new EventosRepository();
-
-    const resultServicos = await grupoServicosRepository.listService(service);
+    const resultServicos = await this.grupoServicosRepository.listService(
+      service
+    );
     const { Eventos } = resultServicos;
 
     Eventos.forEach(async (event) => {
       const resultConvert = await schemaXSDConvert.execute(event.CodEvento);
-      const { error } = resultConvert;
+      const { error } = resultConvert as any;
       if (error) {
-        await eventosRepository.update(event.CodEvento, {
+        await this.eventosRepository.update(event.CodEvento, {
           IsConvert: false,
           EventJson: error,
         });
       } else {
-        await eventosRepository.update(event.CodEvento, {
+        await this.eventosRepository.update(event.CodEvento, {
           IsConvert: true,
           EventJson: resultConvert,
         });
       }
     });
 
-    const resultServicosAll = await grupoServicosRepository.listAll();
+    const resultServicosAll = await this.grupoServicosRepository.listAll();
     return resultServicosAll;
   }
 }

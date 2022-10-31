@@ -1,9 +1,17 @@
-import { GrupoServicosRepository } from "../../repositories/GrupoServicosRepository";
+import { inject, injectable } from "tsyringe";
 
-export class ListCatalogServicoUseCase {
+import { IGrupoServicosRepository } from "../../repositories/IGrupoServicosRepository";
+import { IListCatalogServicoUseCase } from "./IListCatalogServicoUseCase";
+
+@injectable()
+export class ListCatalogServicoUseCase implements IListCatalogServicoUseCase {
+  constructor(
+    @inject("GrupoServicosRepository")
+    private grupoServicosRepository: IGrupoServicosRepository
+  ) {}
+
   async execute() {
-    const grupoServico = new GrupoServicosRepository();
-    const resultServicos = await grupoServico.listAll();
+    const resultServicos = await this.grupoServicosRepository.listAll();
     return resultServicos;
   }
 }

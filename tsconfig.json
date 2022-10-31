@@ -4,6 +4,8 @@
     "rootDir": "src",
     "esModuleInterop": true,
     "lib": ["esnext"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/modules/catalogs/useCases/ListCatalog/.ts"]
 }

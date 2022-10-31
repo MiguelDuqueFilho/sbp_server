@@ -1,9 +1,17 @@
-import { MensagensSendRepository } from "../../repositories/MensagensSendRepository";
+import { inject, injectable } from "tsyringe";
 
-export class ListMessageSendUseCase {
+import { IMensagensSendRepository } from "../../repositories/IMensagensSendRepository";
+import { IListMessageSendUseCase } from "./IListMessageSendUseCase";
+
+@injectable()
+export class ListMessageSendUseCase implements IListMessageSendUseCase {
+  constructor(
+    @inject("MensagensSendRepository")
+    private mensagensSendRepository: IMensagensSendRepository
+  ) {}
+
   async execute() {
-    const mensagensSendRepository = new MensagensSendRepository();
-    const resultEvento = await mensagensSendRepository.ListAll();
+    const resultEvento = await this.mensagensSendRepository.ListAll();
     return resultEvento;
   }
 }

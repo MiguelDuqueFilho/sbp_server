@@ -2,6 +2,8 @@ import fs from "fs";
 import libxmljs from "libxmljs2";
 import path from "path";
 
+import { IValidateMessageUseCase } from "./IValidateMessageUseCase";
+
 async function loadXmlSchema(filename: string) {
   const serviceDomain = filename.substring(0, 3);
   const schemaPath = path.resolve(
@@ -15,10 +17,7 @@ async function loadXmlSchema(filename: string) {
   return libxmljs.parseXml(schemaText);
 }
 
-export class ValidateMessageUseCase {
-  /**
-   * validate
-   */
+export class ValidateMessageUseCase implements IValidateMessageUseCase {
   async execute(event: string, xmlData: string) {
     const xmlDoc = libxmljs.parseXml(xmlData, {} as libxmljs.ParserOptions);
 

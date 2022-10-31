@@ -1,14 +1,18 @@
-import { MsgProcessEnum, MSgStatusEnum } from "@prisma/client";
+import { MsgProcessEnum, MSgStatusEnum, Prisma } from "@prisma/client";
+import { inject, injectable } from "tsyringe";
 
 import { ValidateMessageUseCase } from "../../../message/useCases/ValidateMessage/ValidateMessageUseCase";
-import {
-  IMessageSend,
-  MensagensSendRepository,
-} from "../../repositories/MensagensSendRepository";
+import { IMensagensSendRepository } from "../../repositories/IMensagensSendRepository";
+import { ICreateMessageSendUseCase } from "./ICreateMessageSendUseCase";
 
-export class CreateMessageSendUseCase {
+@injectable()
+export class CreateMessageSendUseCase implements ICreateMessageSendUseCase {
+  constructor(
+    @inject("MensagensSendRepository")
+    private mensagensSendRepository: IMensagensSendRepository
+  ) {}
+
   async execute(event: string, xmlMessage: string) {
-    const mensagensSendRepository = new MensagensSendRepository();
     const validateMessageUseCase = new ValidateMessageUseCase();
 
     const resultValidate = await validateMessageUseCase.execute(
@@ -16,7 +20,7 @@ export class CreateMessageSendUseCase {
       xmlMessage
     );
 
-    let dataList: IMessageSend;
+    let dataList: Prisma.MessageSendCreateInput;
 
     const { error } = resultValidate;
 
@@ -24,8 +28,8 @@ export class CreateMessageSendUseCase {
       dataList = {
         codMsg: resultValidate.codMsg,
         xmlMessage,
-        error: resultValidate.error,
-        process: MsgProcessEnum.DISABLE,
+        error: resultValidate.error as unknown as Prisma.JsonValue,
+        process: MsgProcessEnum.PENDING,
         status: MSgStatusEnum.ERROR,
       };
     } else {
@@ -38,7 +42,7 @@ export class CreateMessageSendUseCase {
       };
     }
 
-    const resultEvento = await mensagensSendRepository.create(dataList);
+    const resultEvento = await this.mensagensSendRepository.create(dataList);
     return resultEvento;
   }
 }

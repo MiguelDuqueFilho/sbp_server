@@ -1,17 +1,10 @@
+import { GrupoServico } from "@prisma/client";
+
 import { prisma } from "../../../database/prismaClient";
-import { IEvento } from "./EventosRepository";
+import { IGrupoServicosRepository } from "./IGrupoServicosRepository";
 
-interface IGrupoServico {
-  GrpServico: string;
-  Descricao?: string;
-  Dominio?: string;
-  Eventos?: IEvento[];
-  createdAt?: string;
-  updateAt?: string;
-}
-
-class GrupoServicosRepository {
-  async createMany(grpServicos: IGrupoServico[]) {
+export class GrupoServicosRepository implements IGrupoServicosRepository {
+  async createMany(grpServicos: GrupoServico[]) {
     const result = await prisma.grupoServico.createMany({
       data: grpServicos as [],
       skipDuplicates: true,
@@ -77,5 +70,3 @@ class GrupoServicosRepository {
     return result;
   }
 }
-
-export { GrupoServicosRepository, IGrupoServico };

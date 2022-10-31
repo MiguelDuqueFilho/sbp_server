@@ -1,16 +1,10 @@
+import { Mensagem } from "@prisma/client";
+
 import { prisma } from "../../../database/prismaClient";
+import { IMessagensRepository } from "./IMensagensRepository";
 
-interface IMensagem {
-  CodMsg?: string;
-  Tag?: string;
-  Descricao: string;
-  EntidadeOrigem?: string;
-  EntidadeDestino?: string;
-  CodEventoId?: string;
-}
-
-class MensagensRepository {
-  async createMany(mensagens: IMensagem[]) {
+export class MensagensRepository implements IMessagensRepository {
+  async createMany(mensagens: Mensagem[]) {
     const result = await prisma.mensagem.createMany({
       data: mensagens as [],
       skipDuplicates: true,
@@ -18,5 +12,3 @@ class MensagensRepository {
     return result;
   }
 }
-
-export { MensagensRepository, IMensagem };

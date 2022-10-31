@@ -85,7 +85,7 @@ model MessageReceive {
   process    MsgProcessEnum @default(DISABLE)
   status     MSgStatusEnum  @default(ERROR)
   error      Json?
-  dateRef    DateTime
+  dateRef    DateTime       @default(now())
   createdAt  DateTime       @default(now())
   updateAt   DateTime       @updatedAt
 

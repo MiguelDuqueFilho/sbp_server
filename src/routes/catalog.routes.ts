@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { LoadCatalogController } from "../modules/catalogs/useCases/CreateCatalog/LoadCatalogController";
+import { UploadCatalogController } from "../modules/catalogs/useCases/CreateCatalog/UploadCatalogController";
 import { ListCatalogEventoByServiceController } from "../modules/catalogs/useCases/ListCatalog/ListCatalogEventoByServiceController";
 import { ListCatalogEventoController } from "../modules/catalogs/useCases/ListCatalog/ListCatalogEventoController";
 import { ListCatalogServicoController } from "../modules/catalogs/useCases/ListCatalog/ListCatalogServicoController";
@@ -10,20 +10,25 @@ import { UpdateSchemaController } from "../modules/catalogs/useCases/UpdateSchem
 
 const catalogRoutes = Router();
 
-const loadCatalogController = new LoadCatalogController();
+const uploadCatalogController = new UploadCatalogController();
 const listCatalogServicoController = new ListCatalogServicoController();
+
 const listCatalogServicoConvertController =
   new ListCatalogServicoConvertController();
+
 const listCatalogEventoController = new ListCatalogEventoController();
+
 const listCatalogEventoByServiceController =
   new ListCatalogEventoByServiceController();
+
 const updateSchemaByServiceController = new UpdateSchemaByServiceController();
+
 const updateSchemaController = new UpdateSchemaController();
 
 /**
  * * path url = '/catalog
  */
-catalogRoutes.post("/load", loadCatalogController.handle);
+catalogRoutes.post("/load", uploadCatalogController.handle);
 catalogRoutes.get("/service/list", listCatalogServicoController.handle);
 catalogRoutes.get(
   "/service/listconv",

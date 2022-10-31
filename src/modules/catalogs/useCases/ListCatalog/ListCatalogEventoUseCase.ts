@@ -1,9 +1,17 @@
-import { EventosRepository } from "../../repositories/EventosRepository";
+import { inject, injectable } from "tsyringe";
 
-export class ListCatalogEventoUseCase {
+import { IEventosRepository } from "../../repositories/IEventosRepository";
+import { IListCatalogEventoUseCase } from "./IListCatalogEventoUseCase";
+
+@injectable()
+export class ListCatalogEventoUseCase implements IListCatalogEventoUseCase {
+  constructor(
+    @inject("EventosRepository")
+    private eventosRepository: IEventosRepository
+  ) {}
+
   async execute(event: string) {
-    const eventosRepository = new EventosRepository();
-    const resultEvento = await eventosRepository.list(event);
+    const resultEvento = await this.eventosRepository.list(event);
     return resultEvento;
   }
 }

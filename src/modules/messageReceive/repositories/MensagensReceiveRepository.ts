@@ -1,26 +1,13 @@
-import { MsgProcessEnum, MSgStatusEnum } from "@prisma/client";
+import { MessageReceive } from "@prisma/client";
 
 import { prisma } from "../../../database/prismaClient";
+import { IMensagensReceiveRepository } from "./IMensagensReceiveRepository";
 
-interface IMessageReceive {
-  id?: string;
-  codMsg: string;
-  xmlMessage: string;
-  process: MsgProcessEnum;
-  status: MSgStatusEnum;
-  error?: object;
-  dateRef?: Date;
-  createdAt?: Date;
-  updateAt?: Date;
-}
-
-class MensagensReceiveRepository {
-  async create(message: IMessageReceive) {
-    const result = await prisma.messageSend.create({
+export class MensagensReceiveRepository implements IMensagensReceiveRepository {
+  async create(message: MessageReceive) {
+    const result = await prisma.messageReceive.create({
       data: message,
     });
     return result;
   }
 }
-
-export { MensagensReceiveRepository, IMessageReceive };

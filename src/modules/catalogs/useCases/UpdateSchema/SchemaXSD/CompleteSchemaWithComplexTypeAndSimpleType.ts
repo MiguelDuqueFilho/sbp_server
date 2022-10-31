@@ -190,7 +190,7 @@ export class CompleteSchemaWithComplexTypeAndSimpleType {
    */
   async execute(buffer: any, msg: string) {
     let result = {};
-    // await examineSchema(buffer);
+
     const { elements } = buffer;
     const { schema } = elements;
     const { xmlns, element, complexType, simpleType } = schema;

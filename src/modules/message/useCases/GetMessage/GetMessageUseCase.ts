@@ -1,9 +1,17 @@
-import { EventosRepository } from "../../../catalogs/repositories/EventosRepository";
+import { inject, injectable } from "tsyringe";
 
-export class GetMessageUseCase {
+import { IEventosRepository } from "../../../catalogs/repositories/IEventosRepository";
+import { IGetMessageUseCase } from "./IGetMessageUseCase";
+
+@injectable()
+export class GetMessageUseCase implements IGetMessageUseCase {
+  constructor(
+    @inject("EventosRepository")
+    private eventosRepository: IEventosRepository
+  ) {}
+
   async execute(CodEvento: string) {
-    const eventosRepository = new EventosRepository();
-    const resultEvento = await eventosRepository.GetEvent(CodEvento);
+    const resultEvento = await this.eventosRepository.getEvent(CodEvento);
     return resultEvento;
   }
 }
