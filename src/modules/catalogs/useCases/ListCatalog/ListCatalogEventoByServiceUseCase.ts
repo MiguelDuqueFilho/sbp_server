@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { IEventosRepository } from "../../repositories/IEventosRepository";
+import { IListCatalogEventoByServiceUseCase } from "./IListCatalogEventoByServiceUseCase";
 
 @injectable()
 export class ListCatalogEventoByServiceUseCase

@@ -32,6 +32,9 @@ import { CreateMessageSendUseCase } from "../../modules/messageSend/useCases/Cre
 import { ICreateMessageSendUseCase } from "../../modules/messageSend/useCases/CreateMessageSend/ICreateMessageSendUseCase";
 import { IListMessageSendUseCase } from "../../modules/messageSend/useCases/ListMessageSend/IListMessageSendUseCase";
 import { ListMessageSendUseCase } from "../../modules/messageSend/useCases/ListMessageSend/ListMessageSendUseCase";
+import { LocalStorageProvider } from "./providers/StorageProvider/implementations/LocalStorageProvider";
+import { S3StorageProvider } from "./providers/StorageProvider/implementations/S3StorageProvider";
+import { IStorageProvider } from "./providers/StorageProvider/IStorageProvider";
 
 container.registerSingleton<IEventosRepository>(
   "EventosRepository",
@@ -111,4 +114,14 @@ container.registerSingleton<ICreateMessageSendUseCase>(
 container.registerSingleton<IListMessageSendUseCase>(
   "ListMessageSendUseCase",
   ListMessageSendUseCase
+);
+
+const diskStorage = {
+  local: LocalStorageProvider,
+  s3: S3StorageProvider,
+};
+
+container.registerSingleton<IStorageProvider>(
+  "StorageProvider",
+  diskStorage[process.env.DISK_STORAGE]
 );

@@ -3,7 +3,6 @@ import path from "path";
 import { xml2js } from "xml-js";
 
 import { logger } from "../../../../../lib/logger";
-import { ITransformXslToJson } from "../ISchemaXSDConvert";
 
 /**
  * Function to change Element Name delete xs: ans cat:
@@ -255,7 +254,7 @@ const options = {
   attributesFn,
 };
 
-export class TransformXslToJson implements ITransformXslToJson {
+export class TransformXslToJson {
   async execute(event: string) {
     let xsd = "";
     const serviceDomain = event.substring(0, 3);

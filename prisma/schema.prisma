@@ -4,6 +4,10 @@ generator client {
   previewFeatures = ["filteredRelationCount"]
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -18,14 +22,6 @@ model ServerLog {
 
   @@map(name: "ServerLogs")
 }
-
-// model User {
-//   id       String @id @default(uuid())
-//   username String @unique
-//   password String
-
-//   @@map(name: "users")
-// }
 
 model GrupoServico {
   GrpServico String   @id @db.VarChar(15)
@@ -105,37 +101,3 @@ model MessageSend {
 
   @@map(name: "MessagesSend")
 }
-
-// model CatCoderrors {
-//   id            String   @id @default(uuid())
-//   cod           String   @unique
-//   Descricao   String?
-//   date_active   String?
-//   date_inactive String?
-//   createdAt     DateTime @default(now())
-
-//   @@map(name: "cat_coderrors")
-// }
-
-// model CatGrade {
-//   grade              String  @unique
-//   horario_abertura   DateTime?
-//   horario_fechamento DateTime?
-
-//   @@map(name: "cat_grade")
-// }
-
-// model CatGradeXMsg {
-//   grade     String
-//   mensagens String
-
-//   @@unique([grade, mensagens], name: "CatGradeXMsg_grade_mensagens_unique_constraint")
-//   @@map(name: "cat_grade_x_msg")
-// }
-
-// model CatIspb {
-//   ISPB  String  @unique
-//   descr String?
-
-//   @@map(name: "cat_ispb")
-// }

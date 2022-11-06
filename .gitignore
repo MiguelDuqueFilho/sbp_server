@@ -1,7 +1,11 @@
 node_modules
 .env
 .env.prod
+.env.local
 logs
-tmp
+tmp/*
+!tmp/.gitkeep
 postgres
 workflows
+dist
+.vscode

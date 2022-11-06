@@ -60,3 +60,66 @@ yarn add @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-confi
     "lint:fix": "eslint src --ext .ts --fix"
   },
 ```
+
+## Commads para gerar chave no mac
+
+```cmd 
+ssh-keygen
+Generating public/private rsa key pair.
+
+The key's randomart image is:
++---[RSA 3072]----+
+|          ..=o   |
+|         . o.*+ .|
+|         .+oE+o= |
+| .     +.+. =.+oo|
+|+ . ..=.S    +..o|
+|.= = +o= o    .  |
+|o + +.+ o        |
+| . ..o o         |
+|  ..  .          |
++----[SHA256]-----+
+DevSPB/AWS ⌚ 10:42:07
+
+$ cat ~/.ssh/id_rsa.pub
+
+```
+copiar a chave publica
+
+
+## Commads instance Aws Ec2 Ubuntu Free tier
+
+```cmd 
+
+sudo user app
+sudo usermod -aG sudo app
+sudo su - app
+
+mkdir .ssh
+chmod 700 .ssh
+
+cd .ssh
+touch authorized_keys
+
+vi authorized_keys
+ paste key  public in this file
+
+```
+logar na instalcia a aprtir do app 
+
+```cmd 
+ssh app#xx.xxx.xxx.xxx (ip public instance)
+
+```
+install node 
+
+```cmd 
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+
+node -v
+
+```
+
+siga as instalações do docker and docker compose
+install Yarn

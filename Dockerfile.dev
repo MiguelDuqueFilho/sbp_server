@@ -15,10 +15,10 @@ COPY prisma ./prisma/
 COPY xsddoc ./xsddoc/
 COPY . .
 
-RUN npm install
-RUN npx prisma generate 
+RUN yarn install
+RUN yarn prisma generate 
 
-RUN npm run build
+RUN yarn build
 
 FROM node:16-alpine 
 

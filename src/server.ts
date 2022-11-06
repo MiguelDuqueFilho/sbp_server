@@ -2,8 +2,7 @@ import "reflect-metadata";
 import "./shared/container";
 import cors from "cors";
 import express from "express";
-import fileUpLoad from "express-fileupload";
-import path from "path";
+import "dotenv/config";
 import "express-async-errors";
 
 import { logger } from "./lib/logger";
@@ -23,13 +22,6 @@ app.use(
 );
 
 app.use(morganMiddleWare);
-
-app.use(
-  fileUpLoad({
-    useTempFiles: true,
-    tempFileDir: path.join(__dirname, "./tmp/"),
-  })
-);
 
 app.use(router);
 

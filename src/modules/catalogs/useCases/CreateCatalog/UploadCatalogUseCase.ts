@@ -1,10 +1,11 @@
 import { Evento, GrupoServico, Mensagem } from "@prisma/client";
-import { UploadedFile } from "express-fileupload";
 import * as fs from "fs/promises";
 import pdfParse from "pdf-parse";
 import { inject, injectable } from "tsyringe";
 
+import { deleteFile } from "../../../../@config/uploadConfig";
 import { logger } from "../../../../lib/logger";
+import { IStorageProvider } from "../../../../shared/container/providers/StorageProvider/IStorageProvider";
 import { IEventosRepository } from "../../repositories/IEventosRepository";
 import { IGrupoServicosRepository } from "../../repositories/IGrupoServicosRepository";
 import { IMensagensRepository } from "../../repositories/IMensagensRepository";
@@ -148,13 +149,15 @@ export class UploadCatalogUseCase implements IUploadCatalogUseCase {
     @inject("EventosRepository")
     private eventosRepository: IEventosRepository,
     @inject("MensagensRepository")
-    private mensagensRepository: IMensagensRepository
+    private mensagensRepository: IMensagensRepository,
+    @inject("StorageProvider")
+    private storageProvider: IStorageProvider
   ) {}
-  async execute(file: UploadedFile) {
-    logger.debug(`Arquivo upload ${file.name}`);
+  async execute(file: Express.Multer.File) {
+    logger.debug(`Arquivo upload ${file.originalname}`);
 
     try {
-      const buffer = await fs.readFile(file.tempFilePath);
+      const buffer = await fs.readFile(file.path);
 
       const data = await pdfParse(buffer);
 
@@ -180,7 +183,7 @@ export class UploadCatalogUseCase implements IUploadCatalogUseCase {
         cadMensagens
       );
 
-      fs.unlink(file.tempFilePath);
+      deleteFile(file.originalname);
 
       return {
         info: data.info.Title,
@@ -191,7 +194,7 @@ export class UploadCatalogUseCase implements IUploadCatalogUseCase {
         mensagens: resultMensagem.count,
       };
     } catch (error) {
-      throw new Error(`Error carregando o arquivo ${file.name}`);
+      throw new Error(`Error carregando o arquivo ${file.originalname}`);
     }
   }
 }
