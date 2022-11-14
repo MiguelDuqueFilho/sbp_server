@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # Install app dependencies 
 COPY package*.json ./
 COPY yarn.lock ./
-COPY .env.local ./
+COPY .env ./
 COPY tsconfig.json ./
 
 COPY prisma ./prisma/
@@ -31,3 +31,4 @@ COPY --from=BUILDER /usr/src/app/ ./
 EXPOSE 4005
 
 CMD ["yarn", "start:migrate:prod"]
+

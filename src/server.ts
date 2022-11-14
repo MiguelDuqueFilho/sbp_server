@@ -11,7 +11,7 @@ import { morganMiddleWare } from "./middlewares/morganMiddleWare";
 import { router } from "./routes";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4005;
 
 app.use(express.json());
 
@@ -33,7 +33,7 @@ process.on("exit", (code) => {
 
 app.listen(port, () => {
   logger.info(
-    `Server SPB Admin running in mode ${
+    `Server SPB Admin running on port:(${port}) in mode ${
       process.env.NODE_ENV || "development"
     }...`
   );

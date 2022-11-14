@@ -6,8 +6,8 @@ import { testRoutes } from "./test.routes";
 
 const router = Router();
 
-router.use("/catalog", catalogRoutes);
-router.use("/message", messageRoutes);
-router.use("/test", testRoutes);
+router.use("/api/catalog", catalogRoutes);
+router.use("/api/message", messageRoutes);
+router.use("/api/test", testRoutes);
 
 export { router };

@@ -106,8 +106,8 @@ const transports = [
   //   prisma,
   //   tableName: "ServerLog",
   // }),
-  fileRotateTransportAll,
-  fileRotateTransportError,
+  // fileRotateTransportAll,
+  // fileRotateTransportError,
 ];
 
 export const logger = winston.createLogger({
