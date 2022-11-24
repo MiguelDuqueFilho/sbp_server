@@ -2,7 +2,7 @@ name: Deploy to Amazon ECR
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 env:
   SERVER_PUBLIC_IP: 0.0.0.0
