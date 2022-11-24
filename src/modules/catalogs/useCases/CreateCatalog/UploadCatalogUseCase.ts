@@ -19,8 +19,8 @@ const regexGrupoServico = /(Grupo de Serviços) ([A-Z]{3}) (?!.)+/g;
 /**
  * * seleciona no pdf o O Domínio do Sistema
  */
-const regexDominio =
-  /(Este grupo de serviços pertence ao domínio de sistema) ([A-Z0-9]*)/g;
+// const regexDominio =
+//   /(Este grupo de serviços pertence ao domínio de sistema) ([A-Z0-9]*)/g;
 
 /**
  * * seleciona Evento
@@ -73,21 +73,30 @@ async function ProcessCatalogItoIII(line: string, index: number) {
    * *  get Service Descricao
    */
   if (lineReference === index) {
-    cadServico = { ...cadServico, Descricao: line };
+    cadServico = {
+      ...cadServico,
+      Descricao: line,
+      Dominio: cadServico.GrpServico,
+    };
+    cadEvento = { GrpServicoId: cadServico.GrpServico } as any;
+    cadServicos = [...cadServicos, cadServico];
+
     return;
   }
 
   /**
    * * get Dominio
    */
-  if (line.match(regexDominio)) {
-    const parseText = <string[]>regexDominio.exec(line);
-    const [, , Dominio] = parseText;
-    cadServico = { ...cadServico, Dominio };
-    cadEvento = { GrpServicoId: cadServico.GrpServico } as any;
-    cadServicos = [...cadServicos, cadServico];
-    return;
-  }
+  // if (line.match(regexDominio)) {
+  //   const parseText = <string[]>regexDominio.exec(line);
+  //   const [, , Dominio] = parseText;
+  //   cadServico = { ...cadServico, Dominio };
+  //   cadEvento = { GrpServicoId: cadServico.GrpServico } as any;
+  //   cadServicos = [...cadServicos, cadServico];
+  //   // console.log(`Dominio: ${Dominio}`);
+  //   // logger.info(cadServico);
+  //   return;
+  // }
 
   /**
    * * get Evento
@@ -121,6 +130,7 @@ async function ProcessCatalogItoIII(line: string, index: number) {
     const parseText = <string[]>regexMensagem.exec(line);
     const [, , Descricao] = parseText;
     cadMensagem = { CodEventoId: cadEvento.CodEvento, Descricao } as any;
+
     return;
   }
 
@@ -138,6 +148,7 @@ async function ProcessCatalogItoIII(line: string, index: number) {
       EntidadeOrigem: EntidadeOrigem.trim(),
       EntidadeDestino: EntidadeDestino.trim(),
     };
+
     cadMensagens = [...cadMensagens, cadMensagem];
   }
 }

@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  server: 
+    container_name: spbsrv
+    hostname: spbsrv
+    restart: unless-stopped
+    image: spb-server-server@latest
+    env_file: 
+      - .env
+    environment:
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - DISABLE_ERP=${DISABLE_ERP}
+    ports: 
+      - ${PORT}
+    networks:
+      - proxynet
+      - external
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    restart: unless-stopped
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - proxynet
+    depends_on:
+      - server
+networks:
+  proxynet:
+    name: custom_network
+  external:
+
+    
