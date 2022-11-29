@@ -2,15 +2,9 @@ name: Deploy to Amazon ECR
 
 on:
   push:
+    branches: [ "develop" , "main"]
+  pull_request:
     branches: [ "main" ]
-
-env:
-  SERVER_PUBLIC_IP: 0.0.0.0
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }
-  AWS_PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
-  AWS_PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
-  AWS_REGION: us-east-1
                 
 permissions:
   contents: read
@@ -25,12 +19,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: create .env file
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_PORT=4005
+        envkey_NODE_ENV=development
+        envkey_DATABASE_URL=${{ secrets.DATABASE_URL }}
+        envkey_LOG_LEVEL=http  
+        envkey_DISK_STORAGE=local
+        envkey_DISABLE_ERP=true
+        file_name: .env
+        fail_on_empty: false
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }
+        aws-region: us-east-1
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -40,13 +46,14 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: spb_repository
-        IMAGE_TAG: ${{ github.sha }} .  
+        ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+        IMAGE_TAG: "latest"
       run: |
         # Build a docker container and
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+
         # push it to ECR 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
    
     # - name: deploy to spb_server
@@ -54,11 +61,19 @@ jobs:
      
     # - name: Deploy docker image to EC2        
     #   uses: appleboy/ssh-action@master
+    #   env:
+    #     AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     AWS_ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+    #     IMAGE_TAG: "latest"
+    #     SERVER_PUBLIC_IP: 0.0.0.0
+    #     AWS_PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
+    #     AWS_PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
+    #     AWS_REGION: us-east-1
     #   with:
     #     host: ${{ env.SERVER_PUBLIC_IP }}
     #     username: ubuntu
     #     key: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
-    #     envs: PRIVATE_SSH_KEY,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
+    #     envs: AWS_PRIVATE_SSH_KEY,REGISTRY,AWS_ECR_REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION
     #     script: |-
     #       sudo apt update
     #       sudo apt install docker.io -y
