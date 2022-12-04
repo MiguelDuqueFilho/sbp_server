@@ -77,10 +77,9 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-          sudo aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 047792108808.dkr.ecr.us-east-1.amazonaws.com
-          sudo docker compose down || true
-          sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          sudo docker compose up --detach --build --build-arg srvimage=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 047792108808.dkr.ecr.us-east-1.amazonaws.com
+          docker compose down 
+          docker compose up --detach --build 
 
     - name: Logout to Amazon ECR
       if: always()

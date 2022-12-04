@@ -4,7 +4,7 @@ services:
     container_name: spbsrv
     hostname: spbsrv
     restart: unless-stopped
-    image: ${srvimage}
+    image: 047792108808.dkr.ecr.us-east-1.amazonaws.com/spb_repository:latest
     ports: 
       - "4005"
     networks:
