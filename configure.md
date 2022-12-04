@@ -121,5 +121,35 @@ node -v
 
 ```
 
-siga as instalações do docker and docker compose
-install Yarn
+## EC2 userdata
+
+
+```cmd
+#!/bin/bash
+# Configurar o repositório
+sudo apt-get update -y
+sudo apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Adicione a chave GPG oficial do Docker:
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# configurar o repositório:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update the apt package index:
+sudo apt-get update -y
+
+# Install Docker Engine, containerd, and Docker Compose.
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+
+# Install aws cli
+sudo apt-get install awscli -y
+
+```

@@ -1,37 +1,15 @@
 version: '3.9'
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:14.3-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespw
-      POSTGRES_DB: spbdb00
-    restart: always
-    ports:
-      - '5432:5432'
-    networks:
-      - internal
   server: 
     container_name: spbsrv
     hostname: spbsrv
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file: 
-      - .env
-    environment:
-      - PORT=${PORT}
-      - NODE_ENV=${NODE_ENV}
-      - DATABASE_URL=${DATABASE_URL}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - DISABLE_ERP=${DISABLE_ERP}
+    image: ${srvimage}
     ports: 
-      - ${PORT}
+      - "4005"
     networks:
-      - proxy
-      - internal
+      - proxynet
+      - external
   nginx:
     container_name: nginx
     hostname: nginx
@@ -42,12 +20,12 @@ services:
     ports:
       - "80:80"
     networks:
-      - proxy
+      - proxynet
     depends_on:
       - server
 networks:
-  proxy:
-    name: revProxy
-  internal:
+  proxynet:
+    name: custom_network
+  external:
 
     
