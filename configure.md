@@ -152,4 +152,6 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Install aws cli
 sudo apt-get install awscli -y
 
+sudo usermod -aG docker $USER
+sudo chown root:docker /var/run/docker.sock
 ```
