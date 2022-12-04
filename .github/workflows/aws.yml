@@ -61,9 +61,13 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_KEY }}
         port: 22
-        source: "nginx/default.conf, nginx/DockerFile, docker-compose.yml"
+        source: "nginx/default.conf, nginx/Dockerfile, docker-compose.yml"
         target: "./"
         
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
     - name: Deploy docker image to EC2        
       uses: appleboy/ssh-action@master
       env:
@@ -78,9 +82,9 @@ jobs:
         port: 22
         script: |
           sudo $(aws ecr get-login --no-include-email --region us-east-1);
-          sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
           sudo docker compose down || true
-          sudo docker compose up -D --build --build-arg srvimage=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          sudo docker compose up --detach --build --build-arg srvimage=$REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     - name: Logout to Amazon ECR
       if: always()
