@@ -8,11 +8,7 @@
     "build": "tsc",
     "dev": "ts-node-dev --exit-child --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "migrate": "prisma migrate dev",
-    "migrate:prod": "prisma migrate deploy",
-    "docker:build:dev": "docker build . -t duquebr/spb-server",
-    "docker:compose:prod": "docker compose up --build -d",
-    "docker:compose:dev": "docker compose up --file docker-compose-dev.yml --build -d",
-    "docker:compose:posgres": "docker compose --file docker-compose-postgres.yml up -d",
+    "docker:compose:dev": "docker compose --file docker-compose-dev.yml up --build --detach  ",
     "start:migrate:prod": "prisma migrate deploy && yarn start",
     "lint": "eslint src --ext .ts ",
     "lint:fix": "eslint src --ext .ts --fix"

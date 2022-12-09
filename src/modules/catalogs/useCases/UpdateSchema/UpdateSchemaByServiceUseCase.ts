@@ -21,24 +21,19 @@ export class UpdateSchemaByServiceUseCase
       service
     );
     const { Eventos } = resultServicos;
+    let count = 0;
 
     Eventos.forEach(async (event) => {
       const resultConvert = await schemaXSDConvert.execute(event.CodEvento);
-      const { error } = resultConvert as any;
-      if (error) {
-        await this.eventosRepository.update(event.CodEvento, {
-          IsConvert: false,
-          EventJson: error,
-        });
-      } else {
-        await this.eventosRepository.update(event.CodEvento, {
-          IsConvert: true,
-          EventJson: resultConvert,
-        });
-      }
+
+      const evento = await this.eventosRepository.update(event.CodEvento, {
+        IsConvert: true,
+        EventJson: resultConvert,
+      });
+
+      if (!evento.IsConvert) count += 1;
     });
 
-    const resultServicosAll = await this.grupoServicosRepository.listAll();
-    return resultServicosAll;
+    return { count };
   }
 }

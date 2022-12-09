@@ -1,7 +1,7 @@
 // import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import * as winston from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
+// import DailyRotateFile from "winston-daily-rotate-file";
 // import { PrismaWinstonTransporter } from "winston-prisma-transporter";
 
 // const prisma = new PrismaClient();
@@ -41,60 +41,60 @@ const formatConsole = winston.format.combine(
   )
 );
 
-const formatFile = winston.format.combine(
-  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
-  winston.format.json()
-);
+// const formatFile = winston.format.combine(
+//   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
+//   winston.format.json()
+// );
 
-const formatDB = winston.format.combine(
-  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
-  winston.format.json()
-);
+// const formatDB = winston.format.combine(
+//   winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
+//   winston.format.json()
+// );
 
-const fileRotateTransportAll: DailyRotateFile = new DailyRotateFile({
-  filename: "logs/spb-srv-admin-all-%DATE%.log",
-  datePattern: "YYYY-MM-DD-HH",
-  zippedArchive: true,
-  maxSize: "10m",
-  maxFiles: 5, // '15d'
-  format: formatFile,
-});
+// const fileRotateTransportAll: DailyRotateFile = new DailyRotateFile({
+//   filename: "logs/spb-srv-admin-all-%DATE%.log",
+//   datePattern: "YYYY-MM-DD-HH",
+//   zippedArchive: true,
+//   maxSize: "10m",
+//   maxFiles: 5, // '15d'
+//   format: formatFile,
+// });
 
-const fileRotateTransportError: DailyRotateFile = new DailyRotateFile({
-  level: "error",
-  filename: "logs/spb-srv-admin-error-%DATE%.log",
-  datePattern: "YYYY-MM-DD-HH",
-  zippedArchive: true,
-  maxSize: "10m",
-  maxFiles: 5, // '7d'
-  format: formatFile,
-});
+// const fileRotateTransportError: DailyRotateFile = new DailyRotateFile({
+//   level: "error",
+//   filename: "logs/spb-srv-admin-error-%DATE%.log",
+//   datePattern: "YYYY-MM-DD-HH",
+//   zippedArchive: true,
+//   maxSize: "10m",
+//   maxFiles: 5, // '7d'
+//   format: formatFile,
+// });
 
-const onNew = (filename: string) => {
-  logger.info(`New file log Created! ${filename}`);
-};
+// const onNew = (filename: string) => {
+//   logger.info(`New file log Created! ${filename}`);
+// };
 
-const onRotate = (oldFile: string, newFile: string) => {
-  logger.info(`File is rotate: ${oldFile} new file created: ${newFile}`);
-};
+// const onRotate = (oldFile: string, newFile: string) => {
+//   logger.info(`File is rotate: ${oldFile} new file created: ${newFile}`);
+// };
 
-const onArquive = (zipFilename: string) => {
-  logger.info(`File is archived: ${zipFilename}`);
-};
+// const onArquive = (zipFilename: string) => {
+//   logger.info(`File is archived: ${zipFilename}`);
+// };
 
-const onRemove = (removedFile: string) => {
-  logger.info(`File is deleted: ${removedFile}`);
-};
+// const onRemove = (removedFile: string) => {
+//   logger.info(`File is deleted: ${removedFile}`);
+// };
 
-fileRotateTransportAll.on("new", onNew);
-fileRotateTransportAll.on("rotate", onRotate);
-fileRotateTransportAll.on("archive", onArquive);
-fileRotateTransportAll.on("logRemove", onRemove);
+// fileRotateTransportAll.on("new", onNew);
+// fileRotateTransportAll.on("rotate", onRotate);
+// fileRotateTransportAll.on("archive", onArquive);
+// fileRotateTransportAll.on("logRemove", onRemove);
 
-fileRotateTransportError.on("new", onNew);
-fileRotateTransportError.on("rotate", onRotate);
-fileRotateTransportError.on("archive", onArquive);
-fileRotateTransportError.on("logRemove", onRemove);
+// fileRotateTransportError.on("new", onNew);
+// fileRotateTransportError.on("rotate", onRotate);
+// fileRotateTransportError.on("archive", onArquive);
+// fileRotateTransportError.on("logRemove", onRemove);
 
 const transports = [
   new winston.transports.Console({

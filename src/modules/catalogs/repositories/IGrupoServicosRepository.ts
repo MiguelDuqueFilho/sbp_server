@@ -9,6 +9,7 @@ export interface IGrupoServicosRepository {
       };
     })[]
   >;
+  
   listAllConverted(): Promise<
     (GrupoServico & {
       _count: {

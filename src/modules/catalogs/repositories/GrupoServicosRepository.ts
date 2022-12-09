@@ -11,6 +11,7 @@ export class GrupoServicosRepository implements IGrupoServicosRepository {
     });
     return result;
   }
+
   async listAll() {
     const result = await prisma.grupoServico.findMany({
       include: {

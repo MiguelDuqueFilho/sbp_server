@@ -1,7 +1,6 @@
 version: '3.9'
 services:
-  server: 
-    container_name: spbsrv
+  spbsrv: 
     hostname: spbsrv
     restart: unless-stopped
     image: 047792108808.dkr.ecr.us-east-1.amazonaws.com/spb_repository:latest
@@ -11,7 +10,6 @@ services:
       - proxynet
       - external
   nginx:
-    container_name: nginx
     hostname: nginx
     restart: unless-stopped
     build: 
@@ -19,13 +17,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    depends_on:
+      - spbsrv
     networks:
       - proxynet
-    depends_on:
-      - server
 networks:
   proxynet:
     name: custom_network
   external:
-
     

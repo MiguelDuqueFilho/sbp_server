@@ -63,6 +63,7 @@ export class EventosRepository implements IEventosRepository {
       },
       data: dataUpdate,
     });
+
     return result;
   }
 }
